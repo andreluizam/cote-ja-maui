@@ -1,0 +1,186 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="CoteAqui.Views.PaginaPrincipal"
+             Title="PaginaPrincipal"
+             BackgroundColor="#0A0A0A">
+
+    <VerticalStackLayout Padding="10" Margin="0,50">
+        <Label 
+            Text="Cote aqui"
+            FontFamily="pbold"
+            FontSize="58"
+            TextColor="#2ECC71"
+            VerticalTextAlignment="Center"
+            HorizontalOptions="Center"/>
+
+        <Label 
+            Text="agora mesmo"
+            FontFamily="pbold"
+            FontSize="28"
+            TextColor="#2ECC71"
+            VerticalTextAlignment="Center"
+            HorizontalOptions="Center"
+            TranslationY="-20"/>
+
+        <Frame  x:Name="framePaises"
+                BackgroundColor="#1C1C1C"
+                BorderColor="#3A3A3A"
+                Padding="8" 
+                CornerRadius="10" Margin="0,50,0,10"
+                HeightRequest="90">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <HorizontalStackLayout Spacing="5">
+
+                    <Image x:Name="ImgEua"
+                           Source="eua.png"
+                           Aspect="AspectFit"
+                           WidthRequest="70"
+                           HeightRequest="70">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarregarMoedaCommand}"
+                                                  CommandParameter="USD-BRL"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Image x:Name="ImgInglaterra"
+                           Source="inglaterra.png"
+                           Aspect="AspectFit"
+                           WidthRequest="65"
+                           HeightRequest="65">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarregarMoedaCommand}"
+                                                  CommandParameter="GBP-BRL"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Image x:Name="ImgJpn"
+                           Source="japao.png"
+                           Aspect="AspectFit"
+                           WidthRequest="70"
+                           HeightRequest="70">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarregarMoedaCommand}"
+                                                  CommandParameter="JPY-BRL"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Image x:Name="ImgSuica"
+                           Source="suica.png"
+                           Aspect="AspectFit"
+                           WidthRequest="65"
+                           HeightRequest="65">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarregarMoedaCommand}"
+                                                  CommandParameter="CHF-BRL"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Image x:Name="ImgBitcoin"
+                           Source="bitcoin.png"
+                           Aspect="AspectFit"
+                           WidthRequest="65"
+                           HeightRequest="58">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarregarMoedaCommand}"
+                                                  CommandParameter="BTC-BRL"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <Frame BackgroundColor="#1C1C1C"
+                BorderColor="#3A3A3A"
+                Padding="10" 
+                CornerRadius="10">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <HorizontalStackLayout Spacing="5" Grid.Row="0">
+                    <Button Text="5 dias"
+                            FontFamily="pmedium"
+                            TextColor="#145A32"
+                            Padding="6"
+                            WidthRequest="80"
+                            HeightRequest="30"
+                            BorderColor="#2ECC71"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Command="{Binding CarregarCotacoesCommand}"
+                            CommandParameter="5"
+                            BackgroundColor="#2ECC71"/>
+
+                    <Button Text="15 dias"
+                            FontFamily="pmedium"
+                            TextColor="#145A32"
+                            Padding="6"
+                            WidthRequest="80"
+                            HeightRequest="30"
+                            BorderColor="#2ECC71"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Command="{Binding CarregarCotacoesCommand}"
+                            CommandParameter="15"
+                            BackgroundColor="#2ECC71"/>
+
+                    <Button Text="30 dias"
+                            FontFamily="pmedium"
+                            TextColor="#145A32"
+                            Padding="6"
+                            WidthRequest="80"
+                            HeightRequest="30"
+                            BorderColor="#2ECC71"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Command="{Binding CarregarCotacoesCommand}"
+                            CommandParameter="30"
+                            BackgroundColor="#2ECC71"/>
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1">
+                    <ScrollView Orientation="Horizontal" Margin="0">
+                        <microcharts:ChartView x:Name="GraficoCotacao"
+                                                HeightRequest="240"
+                                                WidthRequest="600"
+                                                Chart="{Binding GraficoCotacao}"/>
+                    </ScrollView>
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+
+        <VerticalStackLayout Margin="0,15">
+            <Grid>
+                <Label                    
+                    FontSize="22"
+                    TextColor="#2ECC71"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span  Text="Moeda atual: "
+                                   TextColor="#2ECC71"
+                                   FontFamily="pmedium"/>
+                            
+                            <Span x:Name="lblMoeda"
+                                  Text="{Binding ValorMoedaSelecionada}"
+                                  TextColor="#2ECC71"
+                                  FontFamily="pmedium"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>
