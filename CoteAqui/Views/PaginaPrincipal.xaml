@@ -153,7 +153,7 @@
                     <ScrollView Orientation="Horizontal" Margin="0">
                         <microcharts:ChartView x:Name="GraficoCotacao"
                                                 HeightRequest="240"
-                                                WidthRequest="600"
+                                                WidthRequest="{Binding GraficoWidth}"
                                                 Chart="{Binding GraficoCotacao}"/>
                     </ScrollView>
                 </VerticalStackLayout>
@@ -163,16 +163,12 @@
         <VerticalStackLayout Margin="0,15">
             <Grid>
                 <Label                    
-                    FontSize="22"
+                    FontSize="18"
                     TextColor="#2ECC71"
                     VerticalTextAlignment="Center"
                     HorizontalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span  Text="Moeda atual: "
-                                   TextColor="#2ECC71"
-                                   FontFamily="pmedium"/>
-                            
                             <Span x:Name="lblMoeda"
                                   Text="{Binding ValorMoedaSelecionada}"
                                   TextColor="#2ECC71"

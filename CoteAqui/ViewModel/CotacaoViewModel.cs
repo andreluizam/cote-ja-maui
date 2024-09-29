@@ -17,9 +17,21 @@ namespace CoteAqui.ViewModel
         private Chart graficoCotacao;
 
         private string moedaSelecionada = "USD-BRL"; // dolar como padrao
-        private string moedaVisualizacao = "dólar";
+        private string moedaVisualizacao = string.Empty;
 
         private bool stackPaisesVisivel = false;
+
+        private double _graficoWidth;
+
+        public double GraficoWidth
+        {
+            get => _graficoWidth;
+            set
+            {
+                _graficoWidth = value;
+                OnPropertyChanged(nameof(GraficoWidth));
+            }
+        }
 
         public Chart GraficoCotacao
         {
@@ -30,7 +42,6 @@ namespace CoteAqui.ViewModel
                 OnPropertyChanged(nameof(GraficoCotacao));
             }
         }
-
 
         public string ValorMoedaSelecionada
         {
@@ -48,17 +59,25 @@ namespace CoteAqui.ViewModel
             CarregarMoedaCommand = new Command<string>(async (moeda) => await selecionaMoeda(moeda));
         }
 
-        private async Task carregarCotacaoDiaria(string dias = "1")
+        private async Task carregarCotacaoDiaria(string dias = "5")
         {
             CotacaoService cotacaoService = new CotacaoService();
 
             var jsonResponse = await cotacaoService.GetCotacaoEmDias(moedaSelecionada, dias);
 
+            carregarGrafico(jsonResponse);
+            detalhaMoeda(jsonResponse);
+        }
+
+        private void carregarGrafico(List<Cotacao> lstCotacoesResponse)
+        {
+            defineTamanhoGrafico(lstCotacoesResponse.Count); // total de dias
+
             var entradas = new List<Microcharts.ChartEntry>();
 
             int diasReduzir = 0;
 
-            foreach (Cotacao item in jsonResponse)
+            foreach (Cotacao item in lstCotacoesResponse)
             {
                 Cotacao cotacao = item;
 
@@ -70,7 +89,7 @@ namespace CoteAqui.ViewModel
                 {
                     Label = dataFormatada,
                     ValueLabelColor = SKColor.Parse("#2ECC71"),
-                    ValueLabel = cotacao.Bid.ToString("N2"),
+                    ValueLabel = "R$" + cotacao.Bid.ToString("N2"),
                     Color = SKColor.Parse("#2ECC71")
                 });
 
@@ -97,39 +116,39 @@ namespace CoteAqui.ViewModel
             OnPropertyChanged(nameof(GraficoCotacao));
         }
 
+        private void detalhaMoeda(List<Cotacao> lstCotacoesResponse)
+        {
+            ValorMoedaSelecionada = lstCotacoesResponse[0].Code + " R$" + lstCotacoesResponse[0].Bid.ToString("N2");
+
+            OnPropertyChanged(nameof(ValorMoedaSelecionada));
+        }
+
         private async Task selecionaMoeda(string moeda)
         {
             moedaSelecionada = moeda;
 
             await carregarCotacaoDiaria();
-
-            ValorMoedaSelecionada = formataMoeda(moedaSelecionada);
         }
 
-        private string formataMoeda(string codigoMoeda)
+        private void defineTamanhoGrafico(int dias)
         {
-            string moedaFormatada = string.Empty;
-
-            switch (codigoMoeda)
+            switch (dias)
             {
-                case ("USD-BRL"):
-                    moedaFormatada = "dólar";
+                case 5:
+                    GraficoWidth = 500;
                     break;
-                case ("GBP-BRL"):
-                    moedaFormatada = "libra";
+                case 15:
+                    GraficoWidth = 1000;
                     break;
-                case ("JPY-BRL"):
-                    moedaFormatada = "iene";
+                case 30:
+                    GraficoWidth = 1500;
                     break;
-                case ("CHF-BRL"):
-                    moedaFormatada = "franco suíço";
-                    break;
-                case ("BTC-BRL"):
-                    moedaFormatada = "bitcoin";
+                default:
+                    GraficoWidth = 500;
                     break;
             }
 
-            return moedaFormatada;
+            OnPropertyChanged(nameof(GraficoCotacao));
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
