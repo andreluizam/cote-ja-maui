@@ -33,7 +33,7 @@ namespace Cota_aqui.Model
         public decimal Ask { get; set; }
 
         [JsonProperty("timestamp")]
-        public float Timestamp { get; set; }
+        public string Timestamp { get; set; }
 
         [JsonProperty("create_date")]
         public DateTime CreateDate { get; set; }

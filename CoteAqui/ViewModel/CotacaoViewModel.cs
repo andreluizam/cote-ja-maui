@@ -75,25 +75,24 @@ namespace CoteAqui.ViewModel
 
             var entradas = new List<Microcharts.ChartEntry>();
 
-            int diasReduzir = 0;
-
-            foreach (Cotacao item in lstCotacoesResponse)
+            foreach (Cotacao item in lstCotacoesResponse.DistinctBy(o => DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(o.Timestamp))
+                                                  .ToUniversalTime()
+                                                  .ToString("yyyy-MM-dd"))
+                                                  .OrderBy(o => o.Timestamp))
             {
+                string timestamp = item.Timestamp;
+
+                DateTimeOffset datetime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(timestamp));
+
                 Cotacao cotacao = item;
 
-                DateTime hoje = DateTime.Now;
-
-                string dataFormatada = hoje.AddDays(-diasReduzir).ToString("dd/MM");
-
-                entradas.Add(new Microcharts.ChartEntry((float)cotacao.Bid)
+                entradas.Add(new Microcharts.ChartEntry((float)cotacao.Ask)
                 {
-                    Label = dataFormatada,
+                    Label = datetime.ToString("dd/MM"),
                     ValueLabelColor = SKColor.Parse("#2ECC71"),
-                    ValueLabel = "R$" + cotacao.Bid.ToString("N2"),
+                    ValueLabel = "R$" + cotacao.Ask.ToString("N2"),
                     Color = SKColor.Parse("#2ECC71")
                 });
-
-                diasReduzir++;
             }
 
             GraficoCotacao = new LineChart
@@ -109,8 +108,8 @@ namespace CoteAqui.ViewModel
                 ShowYAxisLines = false,
                 LineMode = LineMode.Spline,
                 PointSize = 20,
-                MinValue = 0,
-                MaxValue = 10
+                MinValue = entradas.Min(o => o.Value.Value) * 0.98f,
+                MaxValue = entradas.Max(o => o.Value.Value) * 1.02f
             };
 
             OnPropertyChanged(nameof(GraficoCotacao));
@@ -118,7 +117,7 @@ namespace CoteAqui.ViewModel
 
         private void detalhaMoeda(List<Cotacao> lstCotacoesResponse)
         {
-            ValorMoedaSelecionada = lstCotacoesResponse[0].Code + " R$" + lstCotacoesResponse[0].Bid.ToString("N2");
+            ValorMoedaSelecionada = lstCotacoesResponse[0].Code + " R$" + lstCotacoesResponse[0].Ask.ToString("N2");
 
             OnPropertyChanged(nameof(ValorMoedaSelecionada));
         }
@@ -138,10 +137,10 @@ namespace CoteAqui.ViewModel
                     GraficoWidth = 500;
                     break;
                 case 15:
-                    GraficoWidth = 1000;
+                    GraficoWidth = 2000;
                     break;
                 case 30:
-                    GraficoWidth = 1500;
+                    GraficoWidth = 3500;
                     break;
                 default:
                     GraficoWidth = 500;

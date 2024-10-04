@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microcharts.Maui; // Para ChartView
-using Microcharts;
 using SkiaSharp.Views.Maui.Controls.Hosting; // Para Chart
 
 namespace CoteAqui

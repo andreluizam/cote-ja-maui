@@ -7,7 +7,7 @@
 
     <VerticalStackLayout Padding="10" Margin="0,50">
         <Label 
-            Text="Cote aqui"
+            Text="Cote J&#225;"
             FontFamily="pbold"
             FontSize="58"
             TextColor="#2ECC71"
@@ -15,13 +15,13 @@
             HorizontalOptions="Center"/>
 
         <Label 
-            Text="agora mesmo"
+            Text="os fechamentos n&#227;o constam aos s&#225;bados"
             FontFamily="pbold"
-            FontSize="28"
+            FontSize="14"
             TextColor="#2ECC71"
             VerticalTextAlignment="Center"
             HorizontalOptions="Center"
-            TranslationY="-20"/>
+            TranslationY="5"/>
 
         <Frame  x:Name="framePaises"
                 BackgroundColor="#1C1C1C"
@@ -61,13 +61,13 @@
                     </Image>
 
                     <Image x:Name="ImgJpn"
-                           Source="japao.png"
+                           Source="europa.png"
                            Aspect="AspectFit"
                            WidthRequest="70"
                            HeightRequest="70">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding CarregarMoedaCommand}"
-                                                  CommandParameter="JPY-BRL"/>
+                                                  CommandParameter="EUR-BRL"/>
                         </Image.GestureRecognizers>
                     </Image>
 
@@ -150,7 +150,9 @@
                 </HorizontalStackLayout>
 
                 <VerticalStackLayout Grid.Row="1">
-                    <ScrollView Orientation="Horizontal" Margin="0">
+                    <ScrollView Orientation="Horizontal"
+                                Margin="0" 
+                                HorizontalScrollBarVisibility="Never">
                         <microcharts:ChartView x:Name="GraficoCotacao"
                                                 HeightRequest="240"
                                                 WidthRequest="{Binding GraficoWidth}"
@@ -162,7 +164,7 @@
 
         <VerticalStackLayout Margin="0,15">
             <Grid>
-                <Label                    
+                <Label
                     FontSize="18"
                     TextColor="#2ECC71"
                     VerticalTextAlignment="Center"
