@@ -1,5 +1,5 @@
 # Cote Já .NET MAUI
-Aplicativo de cotação de preços em tempo real em diferentes moedas.
+Aplicativo de cotação de preços em tempo real em diferentes moedas desenvolvido em MAUI.
 
 ## Tecnologias utilizadas 🌐
 -  C# e .NET MAUI
