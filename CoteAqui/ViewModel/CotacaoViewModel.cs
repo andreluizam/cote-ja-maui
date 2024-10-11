@@ -4,24 +4,47 @@ using System.ComponentModel;
 using System.Windows.Input;
 using Microcharts;
 using Cota_aqui.Model;
+using Microsoft.Maui.Controls.Handlers.Items;
+using CoteAqui.Models;
 
 namespace CoteAqui.ViewModel
 {
     public class CotacaoViewModel : INotifyPropertyChanged
     {
+        private Chart graficoCotacao;
+        private string moedaSelecionada = "USD-BRL"; // dolar como padrao
+        private string moedaVisualizacao = string.Empty;
+        private string periodoEscolhido = string.Empty;
+        private double _graficoWidth;
+        private List<Moedas> _moedas;
+
+        public CotacaoViewModel()
+        {
+            CarregarCotacoesCommand = new Command<string>(async (dias) => await getCotacaoDiariamente(dias));
+            SelecionarMoeda = new Command<string>(async (moeda) => await selecionaMoeda(moeda));
+
+            Moedas = new List<Moedas>
+            {
+                new Moedas { Source = "eua.png", Code = "USD-BRL" },
+                new Moedas { Source = "canada.png", Code = "CAD-BRL" },
+                new Moedas { Source = "australia.png", Code = "AUD-BRL" },
+
+                new Moedas { Source = "inglaterra.png", Code = "GBP-BRL" },
+                new Moedas { Source = "europa.png", Code = "EUR-BRL" },
+                new Moedas { Source = "suica.png", Code = "CHF-BRL" },
+
+                new Moedas { Source = "bitcoin.png", Code = "BTC-BRL" },
+                new Moedas { Source = "eth.png", Code = "ETH-BRL" },
+                new Moedas { Source = "litecoin.png", Code = "LTC-BRL" }
+            };
+
+            getCotacaoDiariamente();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand CarregarCotacoesCommand { get; private set; }
-        public ICommand CarregarMoedaCommand { get; private set; }
-
-        private Chart graficoCotacao;
-
-        private string moedaSelecionada = "USD-BRL"; // dolar como padrao
-        private string moedaVisualizacao = string.Empty;
-
-        private bool stackPaisesVisivel = false;
-
-        private double _graficoWidth;
+        public ICommand SelecionarMoeda { get; private set; }
 
         public double GraficoWidth
         {
@@ -53,20 +76,28 @@ namespace CoteAqui.ViewModel
             }
         }
 
-        public CotacaoViewModel()
+        public List<Moedas> Moedas
         {
-            CarregarCotacoesCommand = new Command<string>(async (dias) => await carregarCotacaoDiaria(dias));
-            CarregarMoedaCommand = new Command<string>(async (moeda) => await selecionaMoeda(moeda));
+            get => _moedas;
+            set
+            {
+                _moedas = value;
+                OnPropertyChanged(nameof(Moedas));
+            }
         }
 
-        private async Task carregarCotacaoDiaria(string dias = "5")
+        private async Task getCotacaoDiariamente(string dias = "5")
         {
             CotacaoService cotacaoService = new CotacaoService();
+            periodoEscolhido = dias;
+
+            var cotacaoAtual = await cotacaoService.GetCotacaoAtual(moedaSelecionada);
+
+            detalhaMoeda(cotacaoAtual);
 
             var jsonResponse = await cotacaoService.GetCotacaoEmDias(moedaSelecionada, dias);
 
             carregarGrafico(jsonResponse);
-            detalhaMoeda(jsonResponse);
         }
 
         private void carregarGrafico(List<Cotacao> lstCotacoesResponse)
@@ -114,21 +145,6 @@ namespace CoteAqui.ViewModel
 
             OnPropertyChanged(nameof(GraficoCotacao));
         }
-
-        private void detalhaMoeda(List<Cotacao> lstCotacoesResponse)
-        {
-            ValorMoedaSelecionada = lstCotacoesResponse[0].Code + " R$" + lstCotacoesResponse[0].Ask.ToString("N2");
-
-            OnPropertyChanged(nameof(ValorMoedaSelecionada));
-        }
-
-        private async Task selecionaMoeda(string moeda)
-        {
-            moedaSelecionada = moeda;
-
-            await carregarCotacaoDiaria();
-        }
-
         private void defineTamanhoGrafico(int dias)
         {
             switch (dias)
@@ -149,6 +165,22 @@ namespace CoteAqui.ViewModel
 
             OnPropertyChanged(nameof(GraficoCotacao));
         }
+
+
+        private void detalhaMoeda(Dictionary<string, Cotacao> cotacao)
+        {
+            ValorMoedaSelecionada = cotacao.Keys.FirstOrDefault().Substring(0,3) + " R$" + cotacao.Values.FirstOrDefault().Ask.ToString("N2");
+
+            OnPropertyChanged(nameof(ValorMoedaSelecionada));
+        }
+
+        private async Task selecionaMoeda(string moeda)
+        {
+            moedaSelecionada = moeda;
+
+            await getCotacaoDiariamente(periodoEscolhido);
+        }
+
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

@@ -21,7 +21,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>Cote J&#225;</ApplicationTitle>
+		<ApplicationTitle>Cote Já</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.coteaqui</ApplicationId>
@@ -58,7 +58,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\cardapio.png" />
+	  <None Remove="Resources\Images\litecoin.png" />
 	</ItemGroup>
 
 	<ItemGroup>
