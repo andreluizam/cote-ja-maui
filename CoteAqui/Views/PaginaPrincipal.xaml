@@ -26,17 +26,18 @@
         <Frame  x:Name="framePaises"
                 BackgroundColor="#1C1C1C"
                 BorderColor="#3A3A3A"
-                CornerRadius="10" Margin="0,50,0,10"
-                HeightRequest="90">
+                CornerRadius="10" 
+                Margin="0,50,0,10"
+                HeightRequest="90"
+                Padding="5">
 
                 <CarouselView ItemsSource="{Binding Moedas}" 
                               HeightRequest="100"
-                              WidthRequest="400"
-                              PeekAreaInsets="140"
+                              PeekAreaInsets="130"
                               Position="1">
                     <CarouselView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
                                 <Image Source="{Binding Source}"
                                     HeightRequest="80"
                                     WidthRequest="80"
@@ -66,19 +67,27 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <HorizontalStackLayout Spacing="5" Grid.Row="0">
+                <HorizontalStackLayout Spacing="5" Grid.Row="0" HorizontalOptions="Center">
                     <Button Text="5 dias"
                             FontFamily="pmedium"
                             TextColor="#145A32"
                             Padding="6"
                             WidthRequest="80"
                             HeightRequest="30"
-                            BorderColor="#2ECC71"
+                            BorderColor="#145A32"
                             BorderWidth="1"
                             CornerRadius="15"
                             Command="{Binding CarregarCotacoesCommand}"
                             CommandParameter="5"
-                            BackgroundColor="#2ECC71"/>
+                            BackgroundColor="Transparent">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding DiasSelecionados}" Value="5">
+                                <Setter Property="BackgroundColor" Value="#2ECC71" />
+                                <Setter Property="BorderColor" Value="#2ECC71" />
+                                <Setter Property="TextColor" Value="WhiteSmoke" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
 
                     <Button Text="15 dias"
                             FontFamily="pmedium"
@@ -86,12 +95,20 @@
                             Padding="6"
                             WidthRequest="80"
                             HeightRequest="30"
-                            BorderColor="#2ECC71"
+                            BorderColor="#145A32"
                             BorderWidth="1"
                             CornerRadius="15"
                             Command="{Binding CarregarCotacoesCommand}"
                             CommandParameter="15"
-                            BackgroundColor="#2ECC71"/>
+                            BackgroundColor="Transparent">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding DiasSelecionados}" Value="15">
+                                <Setter Property="BackgroundColor" Value="#2ECC71" />
+                                <Setter Property="BorderColor" Value="#2ECC71" />
+                                <Setter Property="TextColor" Value="WhiteSmoke" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
 
                     <Button Text="30 dias"
                             FontFamily="pmedium"
@@ -99,12 +116,21 @@
                             Padding="6"
                             WidthRequest="80"
                             HeightRequest="30"
-                            BorderColor="#2ECC71"
+                            BorderColor="#145A32"
                             BorderWidth="1"
                             CornerRadius="15"
                             Command="{Binding CarregarCotacoesCommand}"
                             CommandParameter="30"
-                            BackgroundColor="#2ECC71"/>
+                            BackgroundColor="Transparent">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding DiasSelecionados}" Value="30">
+                                <Setter Property="BackgroundColor" Value="#2ECC71" />
+                                <Setter Property="BorderColor" Value="#2ECC71" />
+                                <Setter Property="TextColor" Value="WhiteSmoke" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    
                 </HorizontalStackLayout>
 
                 <VerticalStackLayout Grid.Row="1">

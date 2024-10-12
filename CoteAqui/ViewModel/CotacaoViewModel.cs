@@ -1,11 +1,10 @@
-﻿using CoteAqui.Api;
+﻿using Cota_aqui.Model;
+using CoteAqui.Api;
+using CoteAqui.Models;
+using Microcharts;
 using SkiaSharp;
 using System.ComponentModel;
 using System.Windows.Input;
-using Microcharts;
-using Cota_aqui.Model;
-using Microsoft.Maui.Controls.Handlers.Items;
-using CoteAqui.Models;
 
 namespace CoteAqui.ViewModel
 {
@@ -17,6 +16,7 @@ namespace CoteAqui.ViewModel
         private string periodoEscolhido = string.Empty;
         private double _graficoWidth;
         private List<Moedas> _moedas;
+        private int _diasSelecionados;
 
         public CotacaoViewModel()
         {
@@ -86,8 +86,20 @@ namespace CoteAqui.ViewModel
             }
         }
 
+        public int DiasSelecionados
+        {
+            get => _diasSelecionados;
+            set
+            {
+                _diasSelecionados = value;
+                OnPropertyChanged(nameof(DiasSelecionados));
+            }
+        }
+
         private async Task getCotacaoDiariamente(string dias = "5")
         {
+            DiasSelecionados = Convert.ToInt32(dias);
+
             CotacaoService cotacaoService = new CotacaoService();
             periodoEscolhido = dias;
 
@@ -166,7 +178,6 @@ namespace CoteAqui.ViewModel
             OnPropertyChanged(nameof(GraficoCotacao));
         }
 
-
         private void detalhaMoeda(Dictionary<string, Cotacao> cotacao)
         {
             ValorMoedaSelecionada = cotacao.Keys.FirstOrDefault().Substring(0,3) + " R$" + cotacao.Values.FirstOrDefault().Ask.ToString("N2");
@@ -180,7 +191,6 @@ namespace CoteAqui.ViewModel
 
             await getCotacaoDiariamente(periodoEscolhido);
         }
-
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
