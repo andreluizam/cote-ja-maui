@@ -12,8 +12,7 @@ Aplicativo de cotação de preços em tempo real em diferentes moedas desenvolvi
 -  Gráficos de variações de preços de moedas com a biblioteca Microcharts.
 
 ## Screenshots
-![print2](https://github.com/user-attachments/assets/caf75486-b8a0-4392-89e0-b0f931abde36)
-![print1](https://github.com/user-attachments/assets/34af9ea5-bd03-4529-8feb-b2e15a8d305d)
+![print2](https://github.com/user-attachments/assets/a36f93b7-babb-4321-809d-068b7a286d1e)
 
 ## GIF demonstrativo
 ![GIF](https://github.com/user-attachments/assets/658eb8e4-8610-40c2-9d28-21183668d0c8)
